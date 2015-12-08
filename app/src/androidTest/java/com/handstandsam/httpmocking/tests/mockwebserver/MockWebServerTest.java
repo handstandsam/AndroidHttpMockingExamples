@@ -1,4 +1,4 @@
-package com.handstandsam.httpmocking.tests;
+package com.handstandsam.httpmocking.tests.mockwebserver;
 
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.matcher.ViewMatchers;
@@ -30,8 +30,7 @@ import static org.hamcrest.Matchers.containsString;
 
 
 @RunWith(AndroidJUnit4.class)
-public class MockWebServerTest extends
-        ActivityInstrumentationTestCase2<MainActivity> {
+public class MockWebServerTest extends ActivityInstrumentationTestCase2<MainActivity> {
 
     Logger logger = LoggerFactory.getLogger(MockWebServerTest.class);
 
@@ -44,7 +43,7 @@ public class MockWebServerTest extends
     @Before
     @Override
     public void setUp() throws Exception {
-        mMockWebServer.play(BuildConfig.PORT_MOCKWEBSERVER);
+        mMockWebServer.play(BuildConfig.PORT);
         super.setUp();
         injectInstrumentation(InstrumentationRegistry.getInstrumentation());
         getActivity();
@@ -73,7 +72,7 @@ public class MockWebServerTest extends
         String okhttpMockWebServerUrl = mMockWebServer.getUrl("/").toString();
         logger.debug("okhttp mockserver URL: " + okhttpMockWebServerUrl);
 
-        String serviceEndpoint = "http://127.0.0.1:" + BuildConfig.PORT_MOCKWEBSERVER;
+        String serviceEndpoint = "http://127.0.0.1:" + BuildConfig.PORT;
         logger.debug("MockWebServer Endpoint: " + serviceEndpoint);
         getActivity().setWeatherServiceManager(new WeatherServiceManager(serviceEndpoint));
 

@@ -21,9 +21,13 @@ android {
     }
 
     buildTypes {
+        // def IP = InetAddress.localHost.hostAddress  // This is helpful if you want to point WireMock to your DEV machine and run an instance there
+        def IP = "127.0.0.1"
+        def IPS = "\"" + IP + "\""
+
         debug {
-            buildConfigField "Integer", "PORT_WIREMOCK", "9991"
-            buildConfigField "Integer", "PORT_MOCKWEBSERVER", "9992"
+            buildConfigField "String", "IP", IPS
+            buildConfigField "Integer", "PORT", "9998"
         }
     }
     compileOptions {

@@ -29,8 +29,7 @@ import static org.hamcrest.Matchers.containsString;
 
 
 @RunWith(AndroidJUnit4.class)
-public class RealServerTest extends
-        ActivityInstrumentationTestCase2<MainActivity> {
+public class RealServerTest extends ActivityInstrumentationTestCase2<MainActivity> {
 
     Logger logger = LoggerFactory.getLogger(RealServerTest.class);
 
@@ -46,7 +45,6 @@ public class RealServerTest extends
         getActivity();
     }
 
-
     /**
      * Test Real API
      */
@@ -59,6 +57,5 @@ public class RealServerTest extends
         onView(withId(R.id.button)).perform(click());
         onView(withId(R.id.textView)).check(matches(withText(containsString("GA"))));
     }
-
 
 }
