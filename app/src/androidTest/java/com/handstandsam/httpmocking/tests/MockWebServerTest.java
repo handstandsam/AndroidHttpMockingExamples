@@ -77,8 +77,8 @@ public class MockWebServerTest extends
         String okhttpMockWebServerUrl = mMockWebServer.url("/").toString();
         logger.debug("okhttp mockserver URL: " + okhttpMockWebServerUrl);
 
-        String serviceEndpoint = "http://" + BuildConfig.IP + ":" + BuildConfig.PORT ;
-        logger.debug("WireMock Endpoint: " + serviceEndpoint);
+        String serviceEndpoint = "http://" + BuildConfig.IP + ":" + BuildConfig.PORT;
+        logger.debug("MockWebServer Endpoint: " + serviceEndpoint);
         activity.setWeatherServiceManager(new WeatherServiceManager(serviceEndpoint));
 
         onView(ViewMatchers.withId(R.id.editText)).perform(typeText(city));
