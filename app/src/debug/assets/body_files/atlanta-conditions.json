@@ -1,0 +1,22 @@
+{
+  "response": {
+  "version":"0.1",
+  "termsofService":"http://www.wunderground.com/weather/api/d/terms.html",
+  "features": {
+  "conditions": 1
+  }
+		, "results": [
+		{
+		"name": "Atlanta",
+		"city": "Atlanta",
+		"state": "GA",
+		"country": "US",
+		"country_iso3166":"US",
+		"country_name":"USA",
+		"zmw": "30301.1.99999",
+		"l": "/q/zmw:30301.1.99999"
+		}
+
+		]
+	}
+}

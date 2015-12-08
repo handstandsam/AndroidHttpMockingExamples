@@ -1,0 +1,90 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 18
+    buildToolsVersion "23.0.2"
+
+    defaultConfig {
+        applicationId "weatherview.joshskeen.com.weatherview"
+        minSdkVersion 14
+        targetSdkVersion 18
+        buildConfigField "String", "WEATHERVIEW_API_KEY", "\"840dbdf2737a7ff9\"";
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        // Enabling Multidex support for 'androidTest' builds because of large dependencies
+        multiDexEnabled = true
+    }
+
+    dexOptions {
+        incremental true
+        javaMaxHeapSize "4g"
+    }
+
+    buildTypes {
+
+        // def IP = InetAddress.localHost.hostAddress  // This is helpful if you want to point WireMock to your DEV machine and run an instance there
+        def IP = "127.0.0.1"
+        def IPS = "\"" + IP + "\""
+        debug {
+            buildConfigField "String", "IP", IPS
+            buildConfigField "Integer", "PORT", "9998"
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+    packagingOptions {
+        exclude 'LICENSE.txt'
+        exclude 'LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/maven/com.google.guava/guava/pom.properties'
+        exclude 'META-INF/maven/com.google.guava/guava/pom.xml'
+    }
+}
+
+def versions = [
+        jackson: '2.6.1',
+        jetty  : '9.2+'
+]
+
+dependencies {
+    compile('com.squareup.retrofit:retrofit:1.9.0') {
+        exclude module: 'gson'
+    }
+    compile 'com.google.code.gson:gson:2.5'
+    compile "org.slf4j:slf4j-api:1.7.12"
+
+    //Android Test Dependencies
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.1') {
+        exclude group: 'com.android.support', module: 'support-annotations'
+        exclude group: 'com.google.guava', module: 'guava'
+        exclude group: 'junit', module: 'junit'
+    }
+    androidTestCompile 'com.android.support.test.espresso:espresso-intents:2.2.1'
+    androidTestCompile 'junit:junit:4.12'
+
+    //MockWebServer
+    androidTestCompile('com.squareup.okhttp:mockwebserver:2.6.0') {
+        exclude group: 'junit', module: 'junit'
+    }
+
+    //WireMock
+    androidTestCompile "org.eclipse.jetty:jetty-server:$versions.jetty"
+    androidTestCompile "org.eclipse.jetty:jetty-servlet:$versions.jetty"
+    androidTestCompile "org.eclipse.jetty:jetty-servlets:$versions.jetty"
+    androidTestCompile "org.eclipse.jetty:jetty-webapp:$versions.jetty"
+    androidTestCompile "com.fasterxml.jackson.core:jackson-core:$versions.jackson"
+    androidTestCompile "com.fasterxml.jackson.core:jackson-annotations:$versions.jackson"
+    androidTestCompile "com.fasterxml.jackson.core:jackson-databind:$versions.jackson"
+    androidTestCompile 'com.google.guava:guava:18.0'
+    androidTestCompile 'org.apache.httpcomponents:httpclient-android:4.3.5+'
+    androidTestCompile fileTree(include: ['*.jar'], dir: 'libs')
+    //WireMock 2.0-beta (Modified for Android)
+}
+configurations {
+    all*.exclude group: 'commons-logging', module: 'commons-logging'
+    all*.exclude group: 'com.android.support', module: 'support-annotations'
+}
