@@ -21,13 +21,9 @@ android {
     }
 
     buildTypes {
-
-        // def IP = InetAddress.localHost.hostAddress  // This is helpful if you want to point WireMock to your DEV machine and run an instance there
-        def IP = "127.0.0.1"
-        def IPS = "\"" + IP + "\""
         debug {
-            buildConfigField "String", "IP", IPS
-            buildConfigField "Integer", "PORT", "9998"
+            buildConfigField "Integer", "PORT_WIREMOCK", "9991"
+            buildConfigField "Integer", "PORT_MOCKWEBSERVER", "9992"
         }
     }
     compileOptions {
@@ -51,13 +47,13 @@ def versions = [
 ]
 
 dependencies {
-    compile('com.squareup.retrofit:retrofit:1.9.0') {
-        exclude module: 'gson'
-    }
-    compile 'com.google.code.gson:gson:2.5'
-    compile "org.slf4j:slf4j-api:1.7.12"
+    //------ Compile Dependencies ------
+    compile('com.squareup.retrofit:retrofit:1.8.0')
+    compile 'com.squareup.okhttp:okhttp:2.2.0'
+    compile 'com.squareup.okhttp:okhttp-urlconnection:2.2.0'
+    compile "org.slf4j:slf4j-api:1.7.7"
 
-    //Android Test Dependencies
+    //------ Android Test Dependencies ------
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.1') {
         exclude group: 'com.android.support', module: 'support-annotations'
         exclude group: 'com.google.guava', module: 'guava'
@@ -66,9 +62,9 @@ dependencies {
     androidTestCompile 'com.android.support.test.espresso:espresso-intents:2.2.1'
     androidTestCompile 'junit:junit:4.12'
 
-    //MockWebServer
-    androidTestCompile('com.squareup.okhttp:mockwebserver:2.6.0') {
-        exclude group: 'junit', module: 'junit'
+    //MockWebServer - Version 2.2 of mockwebserver doesn't work because of an issue, so forcing v2.1 - https://github.com/square/okhttp/issues/1069
+    androidTestCompile('com.squareup.okhttp:mockwebserver:2.1.0') {
+        exclude module: 'okhttp'
     }
 
     //WireMock
@@ -81,8 +77,8 @@ dependencies {
     androidTestCompile "com.fasterxml.jackson.core:jackson-databind:$versions.jackson"
     androidTestCompile 'com.google.guava:guava:18.0'
     androidTestCompile 'org.apache.httpcomponents:httpclient-android:4.3.5+'
+    //WireMock 2.0-beta JAR (Modified for Android)
     androidTestCompile fileTree(include: ['*.jar'], dir: 'libs')
-    //WireMock 2.0-beta (Modified for Android)
 }
 configurations {
     all*.exclude group: 'commons-logging', module: 'commons-logging'

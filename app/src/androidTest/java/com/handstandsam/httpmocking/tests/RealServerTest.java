@@ -31,26 +31,19 @@ import static org.hamcrest.Matchers.containsString;
 @RunWith(AndroidJUnit4.class)
 public class RealServerTest extends
         ActivityInstrumentationTestCase2<MainActivity> {
-    Logger logger = LoggerFactory.getLogger(RealServerTest.class);
 
-    private MainActivity activity;
+    Logger logger = LoggerFactory.getLogger(RealServerTest.class);
 
     public RealServerTest() {
         super(MainActivity.class);
     }
-
-    private WireMockConfiguration config = wireMockConfig()
-            .port(Integer.valueOf(BuildConfig.PORT));
-
-    @Rule
-    public WireMockRule wireMockRule = new WireMockRule(config);
 
     @Before
     @Override
     public void setUp() throws Exception {
         super.setUp();
         injectInstrumentation(InstrumentationRegistry.getInstrumentation());
-        activity = getActivity();
+        getActivity();
     }
 
 

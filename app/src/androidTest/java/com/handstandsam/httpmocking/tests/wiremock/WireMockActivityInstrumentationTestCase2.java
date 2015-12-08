@@ -1,10 +1,12 @@
-package com.handstandsam.httpmocking.tests;
+package com.handstandsam.httpmocking.tests.wiremock;
 
+import android.os.Build;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.ActivityInstrumentationTestCase2;
 
+import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
@@ -13,6 +15,7 @@ import com.joshskeen.weatherview.MainActivity;
 import com.joshskeen.weatherview.R;
 import com.joshskeen.weatherview.service.WeatherServiceManager;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -35,29 +38,37 @@ import static com.handstandsam.httpmocking.util.AssetReaderUtil.asset;
 import static org.hamcrest.Matchers.containsString;
 
 @RunWith(AndroidJUnit4.class)
-public class WireMockTest extends
+public class WireMockActivityInstrumentationTestCase2 extends
         ActivityInstrumentationTestCase2<MainActivity> {
 
-    Logger logger = LoggerFactory.getLogger(WireMockTest.class);
+    Logger logger = LoggerFactory.getLogger(WireMockActivityInstrumentationTestCase2.class);
 
     private MainActivity activity;
 
-    public WireMockTest() {
+    public WireMockActivityInstrumentationTestCase2() {
         super(MainActivity.class);
     }
 
-    private WireMockConfiguration config = wireMockConfig()
-            .port(Integer.valueOf(BuildConfig.PORT));
+//    WireMockServer wireMockServer = new WireMockServer(BuildConfig.PORT_WIREMOCK);
 
     @Rule
-    public WireMockRule wireMockRule = new WireMockRule(config);
+    public WireMockRule wireMockRule = new WireMockRule(BuildConfig.PORT_WIREMOCK);
+
 
     @Before
     @Override
     public void setUp() throws Exception {
         super.setUp();
+//        wireMockServer.start();
         injectInstrumentation(InstrumentationRegistry.getInstrumentation());
         activity = getActivity();
+    }
+
+    @After
+    @Override
+    public void tearDown() throws Exception {
+//        wireMockServer.shutdown();
+        super.tearDown();
     }
 
     /**
@@ -65,9 +76,9 @@ public class WireMockTest extends
      */
     @Test
     public void testWiremock() {
+        WireMock.configureFor(BuildConfig.PORT_WIREMOCK);
         logger.debug("testWiremock");
 
-        WireMock.configureFor(BuildConfig.IP, BuildConfig.PORT);
         String city = "atlanta";
         String jsonBody = asset(activity, city + "-conditions.json");
         stubFor(get(urlMatching("/api/.*"))
@@ -76,7 +87,7 @@ public class WireMockTest extends
                         .withStatus(200)
                         .withBody(jsonBody)));
 
-        String serviceEndpoint = "http://" + BuildConfig.IP + ":" + BuildConfig.PORT;
+        String serviceEndpoint = "http://127.0.0.1:" + BuildConfig.PORT_WIREMOCK;
         logger.debug("WireMock Endpoint: " + serviceEndpoint);
         activity.setWeatherServiceManager(new WeatherServiceManager(serviceEndpoint));
 

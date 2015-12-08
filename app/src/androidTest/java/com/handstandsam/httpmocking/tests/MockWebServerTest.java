@@ -35,11 +35,7 @@ public class MockWebServerTest extends
 
     Logger logger = LoggerFactory.getLogger(MockWebServerTest.class);
 
-    public WeatherServiceManager mWeatherServiceManager;
-
     final MockWebServer mMockWebServer = new MockWebServer();
-
-    private MainActivity activity;
 
     public MockWebServerTest() {
         super(MainActivity.class);
@@ -48,10 +44,10 @@ public class MockWebServerTest extends
     @Before
     @Override
     public void setUp() throws Exception {
-        mMockWebServer.start(BuildConfig.PORT);
+        mMockWebServer.play(BuildConfig.PORT_MOCKWEBSERVER);
         super.setUp();
         injectInstrumentation(InstrumentationRegistry.getInstrumentation());
-        activity = getActivity();
+        getActivity();
     }
 
     @After
@@ -74,12 +70,12 @@ public class MockWebServerTest extends
         //script MockWebServer to return this JSON
         mMockWebServer.enqueue(new MockResponse().setBody(assetJson));
 
-        String okhttpMockWebServerUrl = mMockWebServer.url("/").toString();
+        String okhttpMockWebServerUrl = mMockWebServer.getUrl("/").toString();
         logger.debug("okhttp mockserver URL: " + okhttpMockWebServerUrl);
 
-        String serviceEndpoint = "http://" + BuildConfig.IP + ":" + BuildConfig.PORT;
+        String serviceEndpoint = "http://127.0.0.1:" + BuildConfig.PORT_MOCKWEBSERVER;
         logger.debug("MockWebServer Endpoint: " + serviceEndpoint);
-        activity.setWeatherServiceManager(new WeatherServiceManager(serviceEndpoint));
+        getActivity().setWeatherServiceManager(new WeatherServiceManager(serviceEndpoint));
 
         onView(ViewMatchers.withId(R.id.editText)).perform(typeText(city));
         onView(withId(R.id.button)).perform(click());
