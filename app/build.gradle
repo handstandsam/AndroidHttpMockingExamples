@@ -55,7 +55,7 @@ dependencies {
     compile('com.squareup.retrofit:retrofit:1.8.0')
     compile 'com.squareup.okhttp:okhttp:2.2.0'
     compile 'com.squareup.okhttp:okhttp-urlconnection:2.2.0'
-    compile "org.slf4j:slf4j-api:1.7.7"
+    compile "org.slf4j:slf4j-api:1.7.12"
 
     //------ Android Test Dependencies ------
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.1') {
@@ -72,17 +72,16 @@ dependencies {
     }
 
     //WireMock
-    androidTestCompile "org.eclipse.jetty:jetty-server:$versions.jetty"
-    androidTestCompile "org.eclipse.jetty:jetty-servlet:$versions.jetty"
-    androidTestCompile "org.eclipse.jetty:jetty-servlets:$versions.jetty"
-    androidTestCompile "org.eclipse.jetty:jetty-webapp:$versions.jetty"
-    androidTestCompile "com.fasterxml.jackson.core:jackson-core:$versions.jackson"
-    androidTestCompile "com.fasterxml.jackson.core:jackson-annotations:$versions.jackson"
-    androidTestCompile "com.fasterxml.jackson.core:jackson-databind:$versions.jackson"
-    androidTestCompile 'com.google.guava:guava:18.0'
+    androidTestCompile("com.github.tomakehurst:wiremock:2.0.8-beta") {
+        //Allows us to use the Android version of Apache httpclient
+        exclude group: 'org.apache.httpcomponents', module: 'httpclient'
+
+        //Resolves the Duplicate Class Exception
+        //Error:Execution failed for task ':app:transformClassesWithJarMergingForDebugAndroidTest'.
+        //       > com.android.build.api.transform.TransformException: java.util.zip.ZipException: duplicate entry: org/objectweb/asm/AnnotationVisitor.class
+        exclude group: 'asm', module: 'asm'
+    }
     androidTestCompile 'org.apache.httpcomponents:httpclient-android:4.3.5+'
-    //WireMock 2.0-beta JAR (Modified for Android)
-    androidTestCompile fileTree(include: ['*.jar'], dir: 'libs')
 }
 configurations {
     all*.exclude group: 'commons-logging', module: 'commons-logging'
