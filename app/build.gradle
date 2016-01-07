@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 18
+    compileSdkVersion 23
     buildToolsVersion "23.0.2"
 
     defaultConfig {
         applicationId "weatherview.joshskeen.com.weatherview"
         minSdkVersion 14
-        targetSdkVersion 18
+        targetSdkVersion 23
         buildConfigField "String", "WEATHERVIEW_API_KEY", "\"840dbdf2737a7ff9\"";
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -21,12 +21,8 @@ android {
     }
 
     buildTypes {
-        // def IP = InetAddress.localHost.hostAddress  // This is helpful if you want to point WireMock to your DEV machine and run an instance there
-        def IP = "127.0.0.1"
-        def IPS = "\"" + IP + "\""
-
         debug {
-            buildConfigField "String", "IP", IPS
+            buildConfigField "String", "IP", "\"127.0.0.1\""
             buildConfigField "Integer", "PORT", "9998"
         }
     }
@@ -34,21 +30,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_7
         targetCompatibility JavaVersion.VERSION_1_7
     }
-    packagingOptions {
-        exclude 'LICENSE.txt'
-        exclude 'LICENSE'
-        exclude 'META-INF/LICENSE.txt'
-        exclude 'META-INF/LICENSE'
-        exclude 'META-INF/NOTICE'
-        exclude 'META-INF/maven/com.google.guava/guava/pom.properties'
-        exclude 'META-INF/maven/com.google.guava/guava/pom.xml'
-    }
 }
-
-def versions = [
-        jackson: '2.6.1',
-        jetty  : '9.2+'
-]
 
 dependencies {
     //------ Compile Dependencies ------
@@ -80,6 +62,11 @@ dependencies {
         //Error:Execution failed for task ':app:transformClassesWithJarMergingForDebugAndroidTest'.
         //       > com.android.build.api.transform.TransformException: java.util.zip.ZipException: duplicate entry: org/objectweb/asm/AnnotationVisitor.class
         exclude group: 'asm', module: 'asm'
+
+        //Fixes conflict with Android's version
+        //Warning:Dependency org.json:json:20090211 is ignored for debugAndroidTest as it may be conflicting with the internal version provided by Android.
+        //In case of problem, please repackage with jarjar to change the class packages
+        exclude group: 'org.json', module: 'json'
     }
     androidTestCompile 'org.apache.httpcomponents:httpclient-android:4.3.5+'
 }
