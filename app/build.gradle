@@ -7,6 +7,8 @@ android {
     defaultConfig {
         applicationId "weatherview.joshskeen.com.weatherview"
         minSdkVersion 14
+        // For any flavor using WireMock, Platform 19 is required because for Java 7 which is required by WireMock.
+        // This doesn't mean your normal app has to be though
         targetSdkVersion 23
         buildConfigField "String", "WEATHERVIEW_API_KEY", "\"840dbdf2737a7ff9\"";
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -26,9 +28,15 @@ android {
             buildConfigField "Integer", "PORT", "9998"
         }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_7
         targetCompatibility JavaVersion.VERSION_1_7
+    }
+
+    packagingOptions {
+        exclude 'META-INF/maven/com.google.guava/guava/pom.properties'
+        exclude 'META-INF/maven/com.google.guava/guava/pom.xml'
     }
 }
 
