@@ -57,10 +57,10 @@ public class WireMockApplicationTestCase extends ApplicationTestCase<Weatherview
     /**
      * Test WireMock, but just the Http Call.  Make sure the response matches the mock we want.
      */
-    public void testWiremockHttp() throws IOException {
-        logger.debug("testWiremockHttp");
+    public void testWiremockPlusOkHttp() throws IOException {
+        logger.debug("testWiremockPlusOkHttp");
 
-        String uri = "/api/840dbdf2737a7ff9/api840dbdf2737a7ff9/conditions/q/CA/atlanta.json";
+        String uri = "/api/840dbdf2737a7ff9/conditions/q/CA/atlanta.json";
 
         String jsonBody = asset(getApplication(), "atlanta-conditions.json");
         assertFalse(jsonBody.isEmpty());

@@ -52,8 +52,7 @@ public class RealServerTest extends ActivityInstrumentationTestCase2<MainActivit
     public void testRealAPI() {
         logger.debug("testRealAPI");
 
-        String city = "atlanta";
-        onView(ViewMatchers.withId(R.id.editText)).perform(typeText(city));
+        onView(ViewMatchers.withId(R.id.editText)).perform(typeText("atlanta"));
         onView(withId(R.id.button)).perform(click());
         onView(withId(R.id.textView)).check(matches(withText(containsString("GA"))));
     }
