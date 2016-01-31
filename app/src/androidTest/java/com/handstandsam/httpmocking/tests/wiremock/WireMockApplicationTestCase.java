@@ -9,8 +9,6 @@ import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
-import org.junit.After;
-import org.junit.Before;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,17 +37,15 @@ public class WireMockApplicationTestCase extends ApplicationTestCase<Weatherview
      */
     WireMockServer wireMockServer = new WireMockServer(BuildConfig.PORT);
 
-    @Before
     @Override
-    public void setUp() throws Exception {
+    protected void setUp() throws Exception {
         super.setUp();
         wireMockServer.start();
         createApplication();
     }
 
-    @After
     @Override
-    public void tearDown() throws Exception {
+    protected void tearDown() throws Exception {
         wireMockServer.stop();
         super.tearDown();
     }
@@ -80,7 +76,5 @@ public class WireMockApplicationTestCase extends ApplicationTestCase<Weatherview
         Response response = okHttpClient.newCall(request).execute();
 
         assertEquals(jsonBody, response.body().string());
-
     }
-
 }
