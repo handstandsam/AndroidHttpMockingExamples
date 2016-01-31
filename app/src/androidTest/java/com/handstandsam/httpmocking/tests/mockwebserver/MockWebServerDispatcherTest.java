@@ -5,13 +5,14 @@ import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.ActivityInstrumentationTestCase2;
 
-import com.handstandsam.httpmocking.util.AssetReaderUtil;
 import com.joshskeen.weatherview.BuildConfig;
 import com.joshskeen.weatherview.MainActivity;
 import com.joshskeen.weatherview.R;
 import com.joshskeen.weatherview.service.WeatherServiceManager;
+import com.squareup.okhttp.mockwebserver.Dispatcher;
 import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
+import com.squareup.okhttp.mockwebserver.RecordedRequest;
 
 import org.junit.After;
 import org.junit.Before;
@@ -26,17 +27,20 @@ import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static com.handstandsam.httpmocking.util.AssetReaderUtil.asset;
 import static org.hamcrest.Matchers.containsString;
 
 
 @RunWith(AndroidJUnit4.class)
-public class MockWebServerTest extends ActivityInstrumentationTestCase2<MainActivity> {
+public class MockWebServerDispatcherTest extends ActivityInstrumentationTestCase2<MainActivity> {
 
-    Logger logger = LoggerFactory.getLogger(MockWebServerTest.class);
+    Logger logger = LoggerFactory.getLogger(MockWebServerDispatcherTest.class);
 
     final MockWebServer mMockWebServer = new MockWebServer();
 
-    public MockWebServerTest() {
+    private MainActivity activity;
+
+    public MockWebServerDispatcherTest() {
         super(MainActivity.class);
     }
 
@@ -46,7 +50,7 @@ public class MockWebServerTest extends ActivityInstrumentationTestCase2<MainActi
         mMockWebServer.play(BuildConfig.PORT);
         super.setUp();
         injectInstrumentation(InstrumentationRegistry.getInstrumentation());
-        getActivity();
+        this.activity = getActivity();
     }
 
     @After
@@ -57,29 +61,33 @@ public class MockWebServerTest extends ActivityInstrumentationTestCase2<MainActi
     }
 
     /**
-     * Test okhttp mockwebserver
+     * Test okhttp mockwebserver Dispatcher
      */
     @Test
-    public void testMockWebServer() {
-        logger.debug("testWiremock");
+    public void testMockWebServerDispatcher() {
+        logger.debug("testMockWebServerDispatcher");
 
-        String city = "atlanta";
-        String assetJson = AssetReaderUtil.asset(getActivity(), city + "-conditions.json");
+        //Use a dispatcher
+        final Dispatcher dispatcher = new Dispatcher() {
 
-        //script MockWebServer to return this JSON
-        mMockWebServer.enqueue(new MockResponse().setBody(assetJson));
+            @Override
+            public MockResponse dispatch(RecordedRequest request) throws InterruptedException {
+                if (request.getPath().equals("/api/840dbdf2737a7ff9/conditions/q/CA/atlanta.json")) {
+                    String jsonBody = asset(activity, "atlanta-conditions.json");
+                    return new MockResponse().setResponseCode(200).setBody(jsonBody);
+                }
+                return new MockResponse().setResponseCode(404);
+            }
+        };
+        mMockWebServer.setDispatcher(dispatcher);
 
         String okhttpMockWebServerUrl = mMockWebServer.getUrl("/").toString();
         logger.debug("okhttp mockserver URL: " + okhttpMockWebServerUrl);
+        getActivity().setWeatherServiceManager(new WeatherServiceManager(okhttpMockWebServerUrl));
 
-        String serviceEndpoint = "http://127.0.0.1:" + BuildConfig.PORT;
-        logger.debug("MockWebServer Endpoint: " + serviceEndpoint);
-        getActivity().setWeatherServiceManager(new WeatherServiceManager(serviceEndpoint));
-
-        onView(ViewMatchers.withId(R.id.editText)).perform(typeText(city));
+        onView(ViewMatchers.withId(R.id.editText)).perform(typeText("atlanta"));
         onView(withId(R.id.button)).perform(click());
         onView(withId(R.id.textView)).check(matches(withText(containsString("GA"))));
     }
-
 
 }
