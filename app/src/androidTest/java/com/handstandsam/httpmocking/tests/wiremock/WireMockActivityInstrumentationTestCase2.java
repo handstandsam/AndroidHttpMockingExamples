@@ -11,7 +11,6 @@ import com.joshskeen.weatherview.MainActivity;
 import com.joshskeen.weatherview.R;
 import com.joshskeen.weatherview.service.WeatherServiceManager;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -46,7 +45,6 @@ public class WireMockActivityInstrumentationTestCase2 extends ActivityInstrument
     @Rule
     public WireMockRule wireMockRule = new WireMockRule(BuildConfig.PORT);
 
-
     @Before
     @Override
     public void setUp() throws Exception {
@@ -55,23 +53,13 @@ public class WireMockActivityInstrumentationTestCase2 extends ActivityInstrument
         activity = getActivity();
     }
 
-    @After
-    @Override
-    public void tearDown() throws Exception {
-        super.tearDown();
-    }
-
     /**
      * Test WireMock
      */
     @Test
     public void testWiremock() {
-        logger.debug("testWiremock");
-
-        String city = "atlanta";
-        String jsonBody = asset(activity, city + "-conditions.json");
+        String jsonBody = asset(activity, "atlanta-conditions.json");
         stubFor(get(urlMatching("/api/.*"))
-                .atPriority(5)
                 .willReturn(aResponse()
                         .withStatus(200)
                         .withBody(jsonBody)));
@@ -80,7 +68,7 @@ public class WireMockActivityInstrumentationTestCase2 extends ActivityInstrument
         logger.debug("WireMock Endpoint: " + serviceEndpoint);
         activity.setWeatherServiceManager(new WeatherServiceManager(serviceEndpoint));
 
-        onView(ViewMatchers.withId(R.id.editText)).perform(typeText(city));
+        onView(ViewMatchers.withId(R.id.editText)).perform(typeText("atlanta"));
         onView(withId(R.id.button)).perform(click());
         onView(withId(R.id.textView)).check(matches(withText(containsString("GA"))));
     }

@@ -63,7 +63,7 @@ public class WireMockApplicationTestCase extends ApplicationTestCase<Weatherview
         String uri = "/api/840dbdf2737a7ff9/api840dbdf2737a7ff9/conditions/q/CA/atlanta.json";
 
         String jsonBody = asset(getApplication(), "atlanta-conditions.json");
-        assertTrue(jsonBody.length() > 0);
+        assertFalse(jsonBody.isEmpty());
         wireMockServer.stubFor(get(urlMatching(uri))
                 .willReturn(aResponse()
                         .withStatus(200)
