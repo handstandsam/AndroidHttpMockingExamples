@@ -6,10 +6,10 @@ android {
 
     defaultConfig {
         applicationId "weatherview.joshskeen.com.weatherview"
-        minSdkVersion 14
+        minSdkVersion 16
         // For any flavor using WireMock, Platform 19 is required because for Java 7 which is required by WireMock.
         // This doesn't mean your normal app has to be though
-        targetSdkVersion 23
+        targetSdkVersion 22
         buildConfigField "String", "WEATHERVIEW_API_KEY", "\"840dbdf2737a7ff9\"";
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -40,6 +40,11 @@ android {
     }
 }
 
+def versions = [
+        jackson: '2.6.1',
+        jetty  : '9.2.13.v20150730'
+]
+
 dependencies {
     //------ Compile Dependencies ------
     compile('com.squareup.retrofit:retrofit:1.8.0')
@@ -61,24 +66,42 @@ dependencies {
         exclude module: 'okhttp'
     }
 
+    compile "com.google.guava:guava:18.0"
+    compile "org.eclipse.jetty:jetty-server:$versions.jetty"
+    compile "org.eclipse.jetty:jetty-servlet:$versions.jetty"
+    compile "org.eclipse.jetty:jetty-servlets:$versions.jetty"
+
+    compile "com.fasterxml.jackson.core:jackson-core:$versions.jackson",
+            "com.fasterxml.jackson.core:jackson-annotations:$versions.jackson",
+            "com.fasterxml.jackson.core:jackson-databind:$versions.jackson"
+    compile "org.apache.httpcomponents:httpclient:4.5"
+    compile "org.skyscreamer:jsonassert:1.2.3"
+    compile "xmlunit:xmlunit:1.6"
+    compile "com.jayway.jsonpath:json-path:2.0.0"
+    compile "org.slf4j:slf4j-api:1.7.12"
+    compile "net.sf.jopt-simple:jopt-simple:4.9"
+
+    compile fileTree(dir: 'libs', include: 'wiremock-2.0.8-beta.jar')
+
     //WireMock
-    androidTestCompile("com.github.tomakehurst:wiremock:2.0.8-beta") {
-        //Allows us to use the Android version of Apache httpclient instead
-        exclude group: 'org.apache.httpcomponents', module: 'httpclient'
-
-        //Resolves the Duplicate Class Exception
-        //Error:Execution failed for task ':app:transformClassesWithJarMergingForDebugAndroidTest'.
-        //       > com.android.build.api.transform.TransformException: java.util.zip.ZipException: duplicate entry: org/objectweb/asm/AnnotationVisitor.class
-        exclude group: 'asm', module: 'asm'
-
-        //Fixes conflict with Android's version
-        //Warning:Dependency org.json:json:20090211 is ignored for debugAndroidTest as it may be conflicting with the internal version provided by Android.
-        //In case of problem, please repackage with jarjar to change the class packages
-        exclude group: 'org.json', module: 'json'
-    }
+//    androidTestCompile("com.github.tomakehurst:wiremock:2.0.8-beta") {
+//        //Allows us to use the Android version of Apache httpclient instead
+//        exclude group: 'org.apache.httpcomponents', module: 'httpclient'
+//
+//        //Resolves the Duplicate Class Exception
+//        //Error:Execution failed for task ':app:transformClassesWithJarMergingForDebugAndroidTest'.
+//        //       > com.android.build.api.transform.TransformException: java.util.zip.ZipException: duplicate entry: org/objectweb/asm/AnnotationVisitor.class
+//        exclude group: 'asm', module: 'asm'
+//
+//        //Fixes conflict with Android's version
+//        //Warning:Dependency org.json:json:20090211 is ignored for debugAndroidTest as it may be conflicting with the internal version provided by Android.
+//        //In case of problem, please repackage with jarjar to change the class packages
+//        exclude group: 'org.json', module: 'json'
+//    }
     androidTestCompile 'org.apache.httpcomponents:httpclient-android:4.3.5.1'
 }
 configurations {
     all*.exclude group: 'commons-logging', module: 'commons-logging'
     all*.exclude group: 'com.android.support', module: 'support-annotations'
+    all*.exclude group: 'asm', module: 'asm'
 }

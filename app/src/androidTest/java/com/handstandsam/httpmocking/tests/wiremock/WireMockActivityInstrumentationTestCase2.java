@@ -28,6 +28,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlMatching;
+import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static com.handstandsam.httpmocking.util.AssetReaderUtil.asset;
 import static org.hamcrest.Matchers.containsString;
 
@@ -43,7 +44,7 @@ public class WireMockActivityInstrumentationTestCase2 extends ActivityInstrument
     }
 
     @Rule
-    public WireMockRule wireMockRule = new WireMockRule(BuildConfig.PORT);
+    public WireMockRule wireMockRule = new WireMockRule(wireMockConfig().port(9998).httpsPort(9943).keystorePath("/sdcard/test.bks"));
 
     @Before
     @Override
@@ -64,7 +65,7 @@ public class WireMockActivityInstrumentationTestCase2 extends ActivityInstrument
                         .withStatus(200)
                         .withBody(jsonBody)));
 
-        String serviceEndpoint = "http://127.0.0.1:" + BuildConfig.PORT;
+        String serviceEndpoint = "https://127.0.0.1:" + 9943;
         logger.debug("WireMock Endpoint: " + serviceEndpoint);
         activity.setWeatherServiceManager(new WeatherServiceManager(serviceEndpoint));
 
