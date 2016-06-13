@@ -64,7 +64,7 @@ public class WireMockActivityInstrumentationTestCase2 extends ActivityInstrument
                 .willReturn(aResponse()
                         .withStatus(200)
                         .withBody(jsonBody)));
-
+       // String serviceEndpoint = "http://127.0.0.1:" + 9998;
         String serviceEndpoint = "https://127.0.0.1:" + 9943;
         logger.debug("WireMock Endpoint: " + serviceEndpoint);
         activity.setWeatherServiceManager(new WeatherServiceManager(serviceEndpoint));
