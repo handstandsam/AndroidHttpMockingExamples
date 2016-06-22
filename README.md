@@ -1,8 +1,8 @@
 ## Setup
 
--Clone the project
-- build the project
-- run the test present in AndroidHttpMockingExamples/app/src/androidTest/java/com/handstandsam/httpmocking/tests/wiremock/WireMockApplicationTestCase.java.
+- Clone the project
+- Build the project
+- Run the test present in AndroidHttpMockingExamples/app/src/androidTest/java/com/handstandsam/httpmocking/tests/wiremock/WireMockApplicationTestCase.java.
 - The certificate included should be uploaded in the /sdcard/ directory of the emulator. To do this, make sure you have emulator started. Then run
   open a terminal, and run `adb push <filename> /sdcard/. `
 - I have not been able to create a valid keystore myself. This is something I am using from Marius (who provided it in google groups).
