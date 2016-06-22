@@ -3,9 +3,9 @@
 - Clone the project
 - Build the project
 - Run the test present in AndroidHttpMockingExamples/app/src/androidTest/java/com/handstandsam/httpmocking/tests/wiremock/WireMockApplicationTestCase.java.
-- The certificate included should be uploaded in the /sdcard/ directory of the emulator. To do this, make sure you have emulator started. Then run
+- The BKS type keystore (android_wiremock_keystore) included should be uploaded in the /sdcard/ directory of the emulator. To do this, make sure you have emulator started. Then run
   open a terminal, and run `adb push <filename> /sdcard/. `
-- I have not been able to create a valid keystore myself. This is something I am using from Marius (who provided it in google groups).
+- I have not been able to create a valid keystore myself. This is something I am using from Marius . See [here](https://groups.google.com/forum/#!topic/wiremock-user/oDExHctRPCc)
 - Uncomment line number 80 in AndroidHttpMockingExamples/app/src/androidTest/java/com/handstandsam/httpmocking/tests/wiremock/WireMockApplicationTestCase.java to make sure that
  http protocol also works for same url.
 
