@@ -3,11 +3,14 @@
 - Clone the project
 - Build the project, preferrably in Android studio.
 - This project uses the wiremock jar to be stored in build/libs folder. I have been working with the wiremock-2.0.8-beta.jar. The newest version (wiremock-2.1.0-beta.jar is failing on android because of [this](https://groups.google.com/forum/#!topic/wiremock-user/qDy0eZ2RjbI) issue)
-- Run the test present in AndroidHttpMockingExamples/app/src/androidTest/java/com/handstandsam/httpmocking/tests/wiremock/WireMockApplicationTestCase.java.
+- Run the test present in _AndroidHttpMockingExamples/app/src/androidTest/java/com/handstandsam/httpmocking/tests/wiremock/WireMockApplicationTestCase.java._
 - The BKS type keystore (android_wiremock_keystore) included should be uploaded in the /sdcard/ directory of the emulator. To do this, make sure you have emulator started. Then run
-  open a terminal, and run `adb push <filename> /sdcard/. `
+  open a terminal, and run
+  ```
+  adb push <filename> /sdcard/.
+  ```
 - I have not been able to create a valid keystore myself. This is something I am using from Marius . See [here](https://groups.google.com/forum/#!topic/wiremock-user/oDExHctRPCc)
-- Uncomment line number 80 in AndroidHttpMockingExamples/app/src/androidTest/java/com/handstandsam/httpmocking/tests/wiremock/WireMockApplicationTestCase.java to make sure that
+- Uncomment line number 80 in _AndroidHttpMockingExamples/app/src/androidTest/java/com/handstandsam/httpmocking/tests/wiremock/WireMockApplicationTestCase.java_ to make sure that
  http protocol also works for same url.
 
 ## AndroidHttpMockingExamples ##
