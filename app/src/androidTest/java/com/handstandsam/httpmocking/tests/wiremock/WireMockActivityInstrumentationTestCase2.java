@@ -64,7 +64,7 @@ public class WireMockActivityInstrumentationTestCase2 extends ActivityInstrument
      * Test WireMock
      */
     @Test
-    public void testWiremock() throws IOException {
+    public void testWiremock() {
 
         String jsonBody = asset(activity, "atlanta-conditions.json");
         stubFor(get(urlMatching("/api/.*"))
