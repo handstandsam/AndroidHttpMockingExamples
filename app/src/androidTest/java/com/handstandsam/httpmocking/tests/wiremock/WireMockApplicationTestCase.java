@@ -3,6 +3,7 @@ package com.handstandsam.httpmocking.tests.wiremock;
 import android.test.ApplicationTestCase;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
+import com.handstandsam.httpmocking.util.HttpsSettings;
 import com.joshskeen.weatherview.BuildConfig;
 import com.joshskeen.weatherview.inject.WeatherviewApplication;
 import com.squareup.okhttp.OkHttpClient;
@@ -13,10 +14,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.security.cert.X509Certificate;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlMatching;
+import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static com.handstandsam.httpmocking.util.AssetReaderUtil.asset;
 
 public class WireMockApplicationTestCase extends ApplicationTestCase<WeatherviewApplication> {
@@ -35,7 +45,9 @@ public class WireMockApplicationTestCase extends ApplicationTestCase<Weatherview
      * <p/>
      * Reference: http://www.vogella.com/tutorials/AndroidTesting/article.html
      */
-    WireMockServer wireMockServer = new WireMockServer(BuildConfig.PORT);
+    //WireMockServer wireMockServer = new WireMockServer(BuildConfig.PORT);
+    WireMockServer wireMockServer  = new WireMockServer(wireMockConfig().port(BuildConfig.PORT).httpsPort(9943).keystorePath("/sdcard/android_wiremock_keystore"));
+
 
     @Override
     protected void setUp() throws Exception {
@@ -65,10 +77,11 @@ public class WireMockApplicationTestCase extends ApplicationTestCase<Weatherview
                         .withStatus(200)
                         .withBody(jsonBody)));
 
-        String serviceEndpoint = "http://127.0.0.1:" + BuildConfig.PORT;
+       // String serviceEndpoint = "http://127.0.0.1:" + BuildConfig.PORT;
+        String serviceEndpoint = "https://127.0.0.1:" + 9943;
         logger.debug("WireMock Endpoint: " + serviceEndpoint);
 
-        OkHttpClient okHttpClient = new OkHttpClient();
+        OkHttpClient okHttpClient = HttpsSettings.allowAllCertificates();
         Request request = new Request.Builder()
                 .url(serviceEndpoint + uri)
                 .build();
@@ -77,4 +90,9 @@ public class WireMockApplicationTestCase extends ApplicationTestCase<Weatherview
 
         assertEquals(jsonBody, response.body().string());
     }
+
+
+
+
+
 }

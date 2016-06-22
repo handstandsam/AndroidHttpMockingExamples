@@ -10,6 +10,9 @@ import com.joshskeen.weatherview.BuildConfig;
 import com.joshskeen.weatherview.MainActivity;
 import com.joshskeen.weatherview.R;
 import com.joshskeen.weatherview.service.WeatherServiceManager;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -17,6 +20,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -37,6 +41,7 @@ public class WireMockActivityInstrumentationTestCase2 extends ActivityInstrument
 
     Logger logger = LoggerFactory.getLogger(WireMockActivityInstrumentationTestCase2.class);
 
+
     private MainActivity activity;
 
     public WireMockActivityInstrumentationTestCase2() {
@@ -44,12 +49,13 @@ public class WireMockActivityInstrumentationTestCase2 extends ActivityInstrument
     }
 
     @Rule
-    public WireMockRule wireMockRule = new WireMockRule(wireMockConfig().port(9998).httpsPort(9943).keystorePath("/sdcard/test.bks"));
+    public WireMockRule wireMockRule = new WireMockRule(wireMockConfig().port(BuildConfig.PORT));
 
     @Before
     @Override
     public void setUp() throws Exception {
         super.setUp();
+
         injectInstrumentation(InstrumentationRegistry.getInstrumentation());
         activity = getActivity();
     }
@@ -58,14 +64,14 @@ public class WireMockActivityInstrumentationTestCase2 extends ActivityInstrument
      * Test WireMock
      */
     @Test
-    public void testWiremock() {
+    public void testWiremock() throws IOException {
+
         String jsonBody = asset(activity, "atlanta-conditions.json");
         stubFor(get(urlMatching("/api/.*"))
                 .willReturn(aResponse()
                         .withStatus(200)
                         .withBody(jsonBody)));
-       // String serviceEndpoint = "http://127.0.0.1:" + 9998;
-        String serviceEndpoint = "https://127.0.0.1:" + 9943;
+        String serviceEndpoint = "http://127.0.0.1:" + BuildConfig.PORT;
         logger.debug("WireMock Endpoint: " + serviceEndpoint);
         activity.setWeatherServiceManager(new WeatherServiceManager(serviceEndpoint));
 
@@ -73,5 +79,6 @@ public class WireMockActivityInstrumentationTestCase2 extends ActivityInstrument
         onView(withId(R.id.button)).perform(click());
         onView(withId(R.id.textView)).check(matches(withText(containsString("GA"))));
     }
+
 
 }
