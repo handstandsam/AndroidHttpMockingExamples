@@ -77,6 +77,7 @@ dependencies {
         exclude group: 'org.json', module: 'json'
     }
     androidTestCompile 'org.apache.httpcomponents:httpclient-android:4.3.5.1'
+    androidTestCompile 'commons-io:commons-io:2.4'
 }
 configurations {
     all*.exclude group: 'commons-logging', module: 'commons-logging'
