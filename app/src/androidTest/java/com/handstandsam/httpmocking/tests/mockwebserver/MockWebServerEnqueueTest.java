@@ -42,11 +42,12 @@ public class MockWebServerEnqueueTest {
 
     @Before
     public void setUp() throws Exception {
+        activity = activityRule.getActivity();
         mMockWebServer.play(BuildConfig.PORT);
         //script MockWebServer to return this JSON
         String assetJson = AssetReaderUtil.asset(activity, "atlanta-conditions.json");
         mMockWebServer.enqueue(new MockResponse().setBody(assetJson));
-        
+
         String okhttpMockWebServerUrl = mMockWebServer.getUrl("/").toString();
         logger.debug("okhttp mockserver URL: " + okhttpMockWebServerUrl);
 
