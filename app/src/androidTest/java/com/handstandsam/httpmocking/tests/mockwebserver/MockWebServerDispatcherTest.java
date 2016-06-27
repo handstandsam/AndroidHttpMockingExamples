@@ -1,9 +1,8 @@
 package com.handstandsam.httpmocking.tests.mockwebserver;
 
-import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.matcher.ViewMatchers;
+import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.test.ActivityInstrumentationTestCase2;
 
 import com.joshskeen.weatherview.BuildConfig;
 import com.joshskeen.weatherview.MainActivity;
@@ -13,9 +12,11 @@ import com.squareup.okhttp.mockwebserver.Dispatcher;
 import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
 import com.squareup.okhttp.mockwebserver.RecordedRequest;
+import com.squareup.spoon.Spoon;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -32,7 +33,7 @@ import static org.hamcrest.Matchers.containsString;
 
 
 @RunWith(AndroidJUnit4.class)
-public class MockWebServerDispatcherTest extends ActivityInstrumentationTestCase2<MainActivity> {
+public class MockWebServerDispatcherTest {
 
     Logger logger = LoggerFactory.getLogger(MockWebServerDispatcherTest.class);
 
@@ -40,23 +41,16 @@ public class MockWebServerDispatcherTest extends ActivityInstrumentationTestCase
 
     private MainActivity activity;
 
-    public MockWebServerDispatcherTest() {
-        super(MainActivity.class);
-    }
+    @Rule
+    public ActivityTestRule<MainActivity> activityRule = new ActivityTestRule<>(MainActivity.class);
 
     @Before
-    @Override
     public void setUp() throws Exception {
         mMockWebServer.play(BuildConfig.PORT);
-        super.setUp();
-        injectInstrumentation(InstrumentationRegistry.getInstrumentation());
-        this.activity = getActivity();
     }
 
     @After
-    @Override
     public void tearDown() throws Exception {
-        super.tearDown();
         mMockWebServer.shutdown();
     }
 
@@ -65,6 +59,7 @@ public class MockWebServerDispatcherTest extends ActivityInstrumentationTestCase
      */
     @Test
     public void testMockWebServerDispatcher() {
+        activity = activityRule.getActivity();
         logger.debug("testMockWebServerDispatcher");
 
         //Use a dispatcher
@@ -83,10 +78,12 @@ public class MockWebServerDispatcherTest extends ActivityInstrumentationTestCase
 
         String okhttpMockWebServerUrl = mMockWebServer.getUrl("/").toString();
         logger.debug("okhttp mockserver URL: " + okhttpMockWebServerUrl);
-        getActivity().setWeatherServiceManager(new WeatherServiceManager(okhttpMockWebServerUrl));
+        activity.setWeatherServiceManager(new WeatherServiceManager(okhttpMockWebServerUrl));
 
+        Spoon.screenshot(activity, "one");
         onView(ViewMatchers.withId(R.id.editText)).perform(typeText("atlanta"));
         onView(withId(R.id.button)).perform(click());
+        Spoon.screenshot(activity, "two");
         onView(withId(R.id.textView)).check(matches(withText(containsString("GA"))));
     }
 

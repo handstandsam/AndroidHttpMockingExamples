@@ -1,17 +1,12 @@
 package com.handstandsam.httpmocking.tests;
 
-import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.matcher.ViewMatchers;
+import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.test.ActivityInstrumentationTestCase2;
 
-import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
-import com.github.tomakehurst.wiremock.junit.WireMockRule;
-import com.joshskeen.weatherview.BuildConfig;
 import com.joshskeen.weatherview.MainActivity;
 import com.joshskeen.weatherview.R;
 
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,32 +19,25 @@ import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static org.hamcrest.Matchers.containsString;
 
 
 @RunWith(AndroidJUnit4.class)
-public class RealServerTest extends ActivityInstrumentationTestCase2<MainActivity> {
+public class RealServerTest {
 
     Logger logger = LoggerFactory.getLogger(RealServerTest.class);
 
-    public RealServerTest() {
-        super(MainActivity.class);
-    }
+    @Rule
+    public ActivityTestRule<MainActivity> activityRule = new ActivityTestRule<>(MainActivity.class);
 
-    @Before
-    @Override
-    public void setUp() throws Exception {
-        super.setUp();
-        injectInstrumentation(InstrumentationRegistry.getInstrumentation());
-        getActivity();
-    }
+    private MainActivity activity;
 
     /**
      * Test Real API
      */
     @Test
     public void testRealAPI() {
+        activity = activityRule.getActivity();
         logger.debug("testRealAPI");
 
         onView(ViewMatchers.withId(R.id.editText)).perform(typeText("atlanta"));

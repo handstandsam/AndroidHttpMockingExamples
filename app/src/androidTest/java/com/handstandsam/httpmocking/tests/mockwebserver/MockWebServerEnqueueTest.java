@@ -1,9 +1,8 @@
 package com.handstandsam.httpmocking.tests.mockwebserver;
 
-import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.matcher.ViewMatchers;
+import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.test.ActivityInstrumentationTestCase2;
 
 import com.handstandsam.httpmocking.util.AssetReaderUtil;
 import com.joshskeen.weatherview.BuildConfig;
@@ -15,6 +14,7 @@ import com.squareup.okhttp.mockwebserver.MockWebServer;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -29,29 +29,35 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.containsString;
 
 @RunWith(AndroidJUnit4.class)
-public class MockWebServerEnqueueTest extends ActivityInstrumentationTestCase2<MainActivity> {
+public class MockWebServerEnqueueTest {
 
     Logger logger = LoggerFactory.getLogger(MockWebServerEnqueueTest.class);
 
     final MockWebServer mMockWebServer = new MockWebServer();
 
-    public MockWebServerEnqueueTest() {
-        super(MainActivity.class);
-    }
+    @Rule
+    public ActivityTestRule<MainActivity> activityRule = new ActivityTestRule<>(MainActivity.class);
+
+    private MainActivity activity;
 
     @Before
-    @Override
     public void setUp() throws Exception {
         mMockWebServer.play(BuildConfig.PORT);
-        super.setUp();
-        injectInstrumentation(InstrumentationRegistry.getInstrumentation());
-        getActivity();
+        //script MockWebServer to return this JSON
+        String assetJson = AssetReaderUtil.asset(activity, "atlanta-conditions.json");
+        mMockWebServer.enqueue(new MockResponse().setBody(assetJson));
+        
+        String okhttpMockWebServerUrl = mMockWebServer.getUrl("/").toString();
+        logger.debug("okhttp mockserver URL: " + okhttpMockWebServerUrl);
+
+        String serviceEndpoint = "http://127.0.0.1:" + BuildConfig.PORT;
+        logger.debug("MockWebServer Endpoint: " + serviceEndpoint);
+        activity.setWeatherServiceManager(new WeatherServiceManager(serviceEndpoint));
+
     }
 
     @After
-    @Override
     public void tearDown() throws Exception {
-        super.tearDown();
         mMockWebServer.shutdown();
     }
 
@@ -60,18 +66,8 @@ public class MockWebServerEnqueueTest extends ActivityInstrumentationTestCase2<M
      */
     @Test
     public void testMockWebServerEnqueue() {
-        logger.debug("testWiremock");
-        String assetJson = AssetReaderUtil.asset(getActivity(), "atlanta-conditions.json");
-
-        //script MockWebServer to return this JSON
-        mMockWebServer.enqueue(new MockResponse().setBody(assetJson));
-
-        String okhttpMockWebServerUrl = mMockWebServer.getUrl("/").toString();
-        logger.debug("okhttp mockserver URL: " + okhttpMockWebServerUrl);
-
-        String serviceEndpoint = "http://127.0.0.1:" + BuildConfig.PORT;
-        logger.debug("MockWebServer Endpoint: " + serviceEndpoint);
-        getActivity().setWeatherServiceManager(new WeatherServiceManager(serviceEndpoint));
+        activity = activityRule.getActivity();
+        logger.debug("testMockWebServerEnqueue");
 
         onView(ViewMatchers.withId(R.id.editText)).perform(typeText("atlanta"));
         onView(withId(R.id.button)).perform(click());

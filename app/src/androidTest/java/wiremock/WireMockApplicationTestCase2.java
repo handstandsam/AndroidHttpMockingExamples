@@ -1,26 +1,29 @@
 package wiremock;
 
-import android.test.ApplicationTestCase;
+import android.content.Context;
+import android.support.test.InstrumentationRegistry;
+import android.support.test.rule.ActivityTestRule;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.joshskeen.weatherview.BuildConfig;
-import com.joshskeen.weatherview.inject.WeatherviewApplication;
+import com.joshskeen.weatherview.MainActivity;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
-public class WireMockApplicationTestCase2 extends ApplicationTestCase<WeatherviewApplication> {
+import static org.junit.Assert.assertEquals;
+
+public class WireMockApplicationTestCase2 {
 
     Logger logger = LoggerFactory.getLogger(WireMockApplicationTestCase2.class);
-
-    public WireMockApplicationTestCase2() {
-        super(WeatherviewApplication.class);
-    }
 
     /**
      * The @Rule - WireMockRule does NOT currently work for the ApplicationTestCase because it is not based on JUnit3 and not JUnit4 so we need to create & manage the WireMockServer ourselves
@@ -32,19 +35,25 @@ public class WireMockApplicationTestCase2 extends ApplicationTestCase<Weathervie
      */
     WireMockServer wireMockServer;
 
-    @Override
+
+    @Rule
+    public ActivityTestRule<MainActivity> activityRule = new ActivityTestRule<>(MainActivity.class);
+
+    private Context androidTestContext;
+    private Context applicationContext;
+
+
+    @Before
     protected void setUp() throws Exception {
-        super.setUp();
-        createApplication();
-        wireMockServer = new WireMockServer(8080, new AndroidAssetsReadOnlyFileSource(getApplication().getAssets()), false);
+        this.androidTestContext = InstrumentationRegistry.getContext();
+        this.applicationContext = InstrumentationRegistry.getTargetContext().getApplicationContext();
+        wireMockServer = new WireMockServer(8080, new AndroidAssetsReadOnlyFileSource(androidTestContext.getAssets()), false);
         wireMockServer.start();
-        Thread.sleep(20000);
     }
 
-    @Override
+    @After
     protected void tearDown() throws Exception {
         wireMockServer.stop();
-        super.tearDown();
     }
 
     /**

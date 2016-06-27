@@ -1,9 +1,8 @@
 package com.handstandsam.httpmocking.tests.wiremock;
 
-import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.matcher.ViewMatchers;
+import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.test.ActivityInstrumentationTestCase2;
 
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import com.joshskeen.weatherview.BuildConfig;
@@ -11,7 +10,6 @@ import com.joshskeen.weatherview.MainActivity;
 import com.joshskeen.weatherview.R;
 import com.joshskeen.weatherview.service.WeatherServiceManager;
 
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,32 +30,24 @@ import static com.handstandsam.httpmocking.util.AssetReaderUtil.asset;
 import static org.hamcrest.Matchers.containsString;
 
 @RunWith(AndroidJUnit4.class)
-public class WireMockActivityInstrumentationTestCase2 extends ActivityInstrumentationTestCase2<MainActivity> {
+public class WireMockActivityInstrumentationTestCase2 {
 
     Logger logger = LoggerFactory.getLogger(WireMockActivityInstrumentationTestCase2.class);
 
     private MainActivity activity;
 
-    public WireMockActivityInstrumentationTestCase2() {
-        super(MainActivity.class);
-    }
-
     @Rule
     public WireMockRule wireMockRule = new WireMockRule(BuildConfig.PORT);
 
-    @Before
-    @Override
-    public void setUp() throws Exception {
-        super.setUp();
-        injectInstrumentation(InstrumentationRegistry.getInstrumentation());
-        activity = getActivity();
-    }
+    @Rule
+    public ActivityTestRule<MainActivity> activityRule = new ActivityTestRule<>(MainActivity.class);
 
     /**
      * Test WireMock
      */
     @Test
     public void testWiremock() {
+        activity = activityRule.getActivity();
         String jsonBody = asset(activity, "atlanta-conditions.json");
         stubFor(get(urlMatching("/api/.*"))
                 .willReturn(aResponse()
