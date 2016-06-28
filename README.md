@@ -1,10 +1,17 @@
 ## Setup
 
-- Clone the project
+- Clone this project
 - Build the project, preferrably in Android studio.
 - This project uses the wiremock jar to be stored in build/libs folder. I have been working with the `wiremock-2.0.8-beta.jar`. The newest version (`wiremock-2.1.0-beta.jar` is failing on android because of [this](https://groups.google.com/forum/#!topic/wiremock-user/qDy0eZ2RjbI) issue)
 - UPDATE - June 28 - wiremock-2.1.1-beta.jar is added in the repo.
 - Run the test present in _AndroidHttpMockingExamples/app/src/androidTest/java/com/handstandsam/httpmocking/tests/wiremock/WireMockApplicationTestCase.java._
+
+## Include locally build wiremock jar
+
+- Clone wiremock from https://github.com/tomakehurst/wiremock
+- Build the project - run `./gradlew build` . Make sure acceptance tests are passed.
+- Copy the jar file created in `build/libs` and paste it into the Android projects `builds/libs` directory.
+- Change the wiremock's version in Android's build.gradle file to the one you imported.
 
 ## HTTPS Testing
 -  The BKS type keystore (android_wiremock_keystore) included should be uploaded in the `/sdcard/`  directory of the emulator. To do this, make sure you have emulator started. Then run
