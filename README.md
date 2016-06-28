@@ -6,7 +6,7 @@
 - UPDATE - June 28 - wiremock-2.1.1-beta.jar is added in the repo.
 - Run the test present in _AndroidHttpMockingExamples/app/src/androidTest/java/com/handstandsam/httpmocking/tests/wiremock/WireMockApplicationTestCase.java._
 
-## Include locally build wiremock jar
+## Build wiremock jar locally
 
 - Clone wiremock from https://github.com/tomakehurst/wiremock
 - Build the project - run `./gradlew build` . Make sure acceptance tests are passed.
