@@ -45,8 +45,8 @@ public class WireMockApplicationTestCase extends ApplicationTestCase<Weatherview
      * <p/>
      * Reference: http://www.vogella.com/tutorials/AndroidTesting/article.html
      */
-    //WireMockServer wireMockServer = new WireMockServer(BuildConfig.PORT);
-    WireMockServer wireMockServer  = new WireMockServer(wireMockConfig().port(BuildConfig.PORT).httpsPort(9943).keystorePath("/sdcard/android_wiremock_keystore"));
+    WireMockServer wireMockServer = new WireMockServer(BuildConfig.PORT);
+   // WireMockServer wireMockServer  = new WireMockServer(wireMockConfig().port(BuildConfig.PORT).httpsPort(9943).keystorePath("/sdcard/keystore_bks"));
 
 
     @Override
@@ -77,8 +77,8 @@ public class WireMockApplicationTestCase extends ApplicationTestCase<Weatherview
                         .withStatus(200)
                         .withBody(jsonBody)));
 
-       // String serviceEndpoint = "http://127.0.0.1:" + BuildConfig.PORT;
-        String serviceEndpoint = "https://127.0.0.1:" + 9943;
+        String serviceEndpoint = "http://127.0.0.1:" + BuildConfig.PORT;
+       // String serviceEndpoint = "https://127.0.0.1:" + 9943;
         logger.debug("WireMock Endpoint: " + serviceEndpoint);
 
         OkHttpClient okHttpClient = HttpsSettings.allowAllCertificates();

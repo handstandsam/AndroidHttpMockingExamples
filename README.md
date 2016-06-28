@@ -4,7 +4,7 @@
 - Build the project, preferrably in Android studio.
 - This project uses the wiremock jar to be stored in build/libs folder. I have been working with the `wiremock-2.0.8-beta.jar`. The newest version (`wiremock-2.1.0-beta.jar` is failing on android because of [this](https://groups.google.com/forum/#!topic/wiremock-user/qDy0eZ2RjbI) issue)
 - Run the test present in _AndroidHttpMockingExamples/app/src/androidTest/java/com/handstandsam/httpmocking/tests/wiremock/WireMockApplicationTestCase.java._
-- The BKS type keystore (android_wiremock_keystore) included should be uploaded in the `/sdcard/` directory of the emulator. To do this, make sure you have emulator started. Then run
+- The BKS type keystore (android_wiremock_keystore) included should be uploaded in the `/sdcard/`o directory of the emulator. To do this, make sure you have emulator started. Then run
   open a terminal, and run
   ```
   adb push <filename> /sdcard/.

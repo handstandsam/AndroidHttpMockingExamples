@@ -81,7 +81,7 @@ dependencies {
     compile "org.slf4j:slf4j-api:1.7.12"
     compile "net.sf.jopt-simple:jopt-simple:4.9"
 
-    compile fileTree(dir: 'libs', include: 'wiremock-2.0.8-beta.jar')
+    compile fileTree(dir: 'libs', include: 'wiremock-2.1.1-beta.jar')
 
     //WireMock
 //    androidTestCompile("com.github.tomakehurst:wiremock:2.0.8-beta") {
