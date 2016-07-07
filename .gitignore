@@ -83,3 +83,5 @@ com_crashlytics_export_strings.xml
 
 spoon-output
 run_spoon.sh
+
+spoon-runner-1.5.7-jar-with-dependencies.jar
