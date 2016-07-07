@@ -80,3 +80,6 @@ com_crashlytics_export_strings.xml
 
 /build
 /captures
+
+spoon-output
+run_spoon.sh
