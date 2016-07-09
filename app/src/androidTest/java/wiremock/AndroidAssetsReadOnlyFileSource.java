@@ -9,15 +9,18 @@ import com.github.tomakehurst.wiremock.common.TextFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * WARNING: This is currently be developed and not working yet.
+ */
 public class AndroidAssetsReadOnlyFileSource implements FileSource {
-    Logger logger = LoggerFactory.getLogger(AndroidAssetsReadOnlyFileSource.class);
 
+    Logger logger = LoggerFactory.getLogger(AndroidAssetsReadOnlyFileSource.class);
 
     private final AssetManager assetManager;
 
@@ -50,6 +53,11 @@ public class AndroidAssetsReadOnlyFileSource implements FileSource {
     @Override
     public String getPath() {
         return assetPath;
+    }
+
+    @Override
+    public URI getUri() {
+        return null;
     }
 
     @Override
