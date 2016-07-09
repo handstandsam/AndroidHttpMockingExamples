@@ -14,14 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.security.cert.X509Certificate;
-
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
-import javax.net.ssl.SSLSocketFactory;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
@@ -46,7 +38,7 @@ public class WireMockApplicationTestCase extends ApplicationTestCase<Weatherview
      * Reference: http://www.vogella.com/tutorials/AndroidTesting/article.html
      */
    // WireMockServer wireMockServer = new WireMockServer(BuildConfig.PORT);
-    WireMockServer wireMockServer  = new WireMockServer(wireMockConfig().port(BuildConfig.PORT).httpsPort(9943).keystoreType("BKS").keystorePath("/sdcard/keystore_bks2"));
+    WireMockServer wireMockServer  = new WireMockServer(wireMockConfig().port(BuildConfig.PORT));
 
 
     @Override
