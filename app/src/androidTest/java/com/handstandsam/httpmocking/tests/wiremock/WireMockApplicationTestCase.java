@@ -1,11 +1,14 @@
 package com.handstandsam.httpmocking.tests.wiremock;
 
-import android.test.ApplicationTestCase;
+import android.content.Context;
+import android.support.test.InstrumentationRegistry;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.joshskeen.weatherview.BuildConfig;
-import com.joshskeen.weatherview.inject.WeatherviewApplication;
 
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,14 +22,14 @@ import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlMatching;
 import static com.handstandsam.httpmocking.util.AssetReaderUtil.asset;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
-public class WireMockApplicationTestCase extends ApplicationTestCase<WeatherviewApplication> {
+public class WireMockApplicationTestCase {
 
     Logger logger = LoggerFactory.getLogger(WireMockApplicationTestCase.class);
 
-    public WireMockApplicationTestCase() {
-        super(WeatherviewApplication.class);
-    }
+    private Context applicationContext;
 
     /**
      * The @Rule - WireMockRule does NOT currently work for the ApplicationTestCase because it is not based on JUnit3 and not JUnit4 so we need to create & manage the WireMockServer ourselves
@@ -38,28 +41,27 @@ public class WireMockApplicationTestCase extends ApplicationTestCase<Weatherview
      */
     WireMockServer wireMockServer = new WireMockServer(BuildConfig.PORT);
 
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
+    @Before
+    public void setUp() {
+        applicationContext = InstrumentationRegistry.getTargetContext().getApplicationContext();
         wireMockServer.start();
-        createApplication();
     }
 
-    @Override
-    protected void tearDown() throws Exception {
+    @After
+    public void tearDown() throws Exception {
         wireMockServer.stop();
-        super.tearDown();
     }
 
     /**
      * Test WireMock, but just the Http Call.  Make sure the response matches the mock we want.
      */
+    @Test
     public void testWiremockPlusOkHttp() throws IOException {
         logger.debug("testWiremockPlusOkHttp");
 
         String uri = "/api/840dbdf2737a7ff9/conditions/q/CA/atlanta.json";
 
-        String jsonBody = asset(getApplication(), "atlanta-conditions.json");
+        String jsonBody = asset(applicationContext, "atlanta-conditions.json");
         assertFalse(jsonBody.isEmpty());
         wireMockServer.stubFor(get(urlMatching(uri))
                 .willReturn(aResponse()
