@@ -5,14 +5,15 @@ import android.test.ApplicationTestCase;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.joshskeen.weatherview.BuildConfig;
 import com.joshskeen.weatherview.inject.WeatherviewApplication;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;

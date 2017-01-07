@@ -43,9 +43,12 @@ android {
 
 dependencies {
     //------ Compile Dependencies ------
-    compile('com.squareup.retrofit:retrofit:1.8.0')
-    compile 'com.squareup.okhttp:okhttp:2.2.0'
-    compile 'com.squareup.okhttp:okhttp-urlconnection:2.2.0'
+    compile('com.squareup.retrofit2:retrofit:2.1.0') {
+        exclude group: 'com.squareup.okhttp3', module: 'okhttp'
+    }
+    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
+    compile 'com.squareup.okhttp3:okhttp:3.5.0'
+    compile "com.squareup.okhttp3:logging-interceptor:3.5.0"
     compile "org.slf4j:slf4j-api:1.7.12"
 
     //------ Android Test Dependencies ------
@@ -59,7 +62,7 @@ dependencies {
     androidTestCompile 'junit:junit:4.12'
 
     //MockWebServer - Version 2.2 of mockwebserver doesn't work because of an issue, so forcing v2.1 - https://github.com/square/okhttp/issues/1069
-    androidTestCompile('com.squareup.okhttp:mockwebserver:2.1.0') {
+    androidTestCompile('com.squareup.okhttp3:mockwebserver:3.5.0') {
         exclude module: 'okhttp'
     }
 

@@ -7,9 +7,7 @@ import android.support.test.rule.ActivityTestRule;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.joshskeen.weatherview.BuildConfig;
 import com.joshskeen.weatherview.MainActivity;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
+import com.joshskeen.weatherview.inject.InjectionFactory;
 
 import org.junit.After;
 import org.junit.Before;
@@ -18,6 +16,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 import static org.junit.Assert.assertEquals;
 
@@ -65,7 +67,7 @@ public class WireMockApplicationTestCase2 {
         String serviceEndpoint = "http://127.0.0.1:" + BuildConfig.PORT;
         logger.debug("WireMock Endpoint: " + serviceEndpoint);
 
-        OkHttpClient okHttpClient = new OkHttpClient();
+        OkHttpClient okHttpClient = InjectionFactory.buildOkhttpClient();
 
         String uri = "/hello-world";
         Request request = new Request.Builder()

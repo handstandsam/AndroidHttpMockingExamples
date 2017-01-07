@@ -1,42 +1,31 @@
 package com.joshskeen.weatherview.service;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.joshskeen.weatherview.inject.InjectionFactory;
 import com.joshskeen.weatherview.model.WeatherCondition;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import java.io.IOException;
 import java.util.List;
 
-import retrofit.RestAdapter;
-
 public class WeatherServiceManager {
-    Logger logger = LoggerFactory.getLogger(WeatherServiceManager.class);
 
-    private String mWeatherServiceEndpoint;
+    private static Gson gson = new GsonBuilder().create();
+
     private final WeatherServiceInterface mWeatherServiceInterface;
 
     public WeatherServiceManager(String weatherServiceEndpoint) {
-        mWeatherServiceEndpoint = weatherServiceEndpoint;
-        mWeatherServiceInterface = buildRestAdapter()
+        mWeatherServiceInterface = InjectionFactory.buildRetrofit(weatherServiceEndpoint)
                 .create(WeatherServiceInterface.class);
     }
 
     public List<WeatherCondition> getConditionsFor(String name) {
-        return mWeatherServiceInterface.getConditions(name)
-                .getConditionsResponse()
-                .getWeatherConditions();
-    }
-
-    private RestAdapter buildRestAdapter() {
-        return new RestAdapter.Builder()
-                .setEndpoint(mWeatherServiceEndpoint)
-                .setLogLevel(RestAdapter.LogLevel.FULL)
-                .setLog(new RestAdapter.Log() {
-                    @Override
-                    public void log(String message) {
-                        System.out.println("==>" + message);
-                    }
-                })
-                .build();
+        try {
+            return mWeatherServiceInterface.getConditions(name).execute().body().getConditionsResponse()
+                    .getWeatherConditions();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

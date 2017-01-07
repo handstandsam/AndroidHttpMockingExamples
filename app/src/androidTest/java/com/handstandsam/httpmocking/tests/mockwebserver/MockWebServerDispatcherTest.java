@@ -8,10 +8,6 @@ import com.joshskeen.weatherview.BuildConfig;
 import com.joshskeen.weatherview.MainActivity;
 import com.joshskeen.weatherview.R;
 import com.joshskeen.weatherview.service.WeatherServiceManager;
-import com.squareup.okhttp.mockwebserver.Dispatcher;
-import com.squareup.okhttp.mockwebserver.MockResponse;
-import com.squareup.okhttp.mockwebserver.MockWebServer;
-import com.squareup.okhttp.mockwebserver.RecordedRequest;
 import com.squareup.spoon.Spoon;
 
 import org.junit.After;
@@ -21,6 +17,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import okhttp3.mockwebserver.Dispatcher;
+import okhttp3.mockwebserver.MockResponse;
+import okhttp3.mockwebserver.MockWebServer;
+import okhttp3.mockwebserver.RecordedRequest;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -32,7 +33,6 @@ import static com.handstandsam.httpmocking.util.AssetReaderUtil.asset;
 import static org.hamcrest.Matchers.containsString;
 
 
-@RunWith(AndroidJUnit4.class)
 public class MockWebServerDispatcherTest {
 
     Logger logger = LoggerFactory.getLogger(MockWebServerDispatcherTest.class);
@@ -46,7 +46,7 @@ public class MockWebServerDispatcherTest {
 
     @Before
     public void setUp() throws Exception {
-        mMockWebServer.play(BuildConfig.PORT);
+        mMockWebServer.start(BuildConfig.PORT);
     }
 
     @After
@@ -76,7 +76,7 @@ public class MockWebServerDispatcherTest {
         };
         mMockWebServer.setDispatcher(dispatcher);
 
-        String okhttpMockWebServerUrl = mMockWebServer.getUrl("/").toString();
+        String okhttpMockWebServerUrl = mMockWebServer.url("/").toString();
         logger.debug("okhttp mockserver URL: " + okhttpMockWebServerUrl);
         activity.setWeatherServiceManager(new WeatherServiceManager(okhttpMockWebServerUrl));
 

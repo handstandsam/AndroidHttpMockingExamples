@@ -29,7 +29,6 @@ import static com.github.tomakehurst.wiremock.client.WireMock.urlMatching;
 import static com.handstandsam.httpmocking.util.AssetReaderUtil.asset;
 import static org.hamcrest.Matchers.containsString;
 
-@RunWith(AndroidJUnit4.class)
 public class WireMockActivityInstrumentationTestCase2 {
 
     Logger logger = LoggerFactory.getLogger(WireMockActivityInstrumentationTestCase2.class);
