@@ -3,8 +3,8 @@
 **These are examples by @HandstandSam - http://handstandsam.com to allow you to mock out external HTTP services on and Android device itself.**
 
 ## Android "androidTest" Examples for: ##
-* WireMock 2.1.5-rc4
-* okhttp MockWebServer
+* WireMock 2.2.2
+* okhttp MockWebServer 3.5.0
 
 ### Links ###
 * WireMock (by @tomakehurst) - http://wiremock.org/
