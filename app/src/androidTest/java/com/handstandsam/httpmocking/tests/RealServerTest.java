@@ -40,7 +40,7 @@ public class RealServerTest {
         activity = activityRule.getActivity();
         logger.debug("testRealAPI");
 
-        onView(ViewMatchers.withId(R.id.editText)).perform(typeText("atlanta"));
+        onView(ViewMatchers.withId(R.id.editText)).perform(typeText("atlanta, ga"));
         onView(withId(R.id.button)).perform(click());
         onView(withId(R.id.textView)).check(matches(withText(containsString("GA"))));
     }
