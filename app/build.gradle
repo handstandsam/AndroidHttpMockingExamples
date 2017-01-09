@@ -67,7 +67,7 @@ dependencies {
     }
 
     //WireMock
-    androidTestCompile("com.github.tomakehurst:wiremock:2.2.2") {
+    androidTestCompile("com.github.tomakehurst:wiremock:2.5.0") {
         //Using Android Version Instead
         exclude group: 'org.apache.httpcomponents', module: 'httpclient'
 

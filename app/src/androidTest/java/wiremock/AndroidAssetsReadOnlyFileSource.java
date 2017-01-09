@@ -41,6 +41,11 @@ public class AndroidAssetsReadOnlyFileSource implements FileSource {
     }
 
     @Override
+    public TextFile getTextFileNamed(String s) {
+        return null;
+    }
+
+    @Override
     public void createIfNecessary() {
         return;
     }
@@ -114,5 +119,10 @@ public class AndroidAssetsReadOnlyFileSource implements FileSource {
             }
         }
         return exists;
+    }
+
+    @Override
+    public void deleteFile(String s) {
+
     }
 }
