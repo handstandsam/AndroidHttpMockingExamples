@@ -67,7 +67,7 @@ public class WireMockApplicationTestCase2 {
         String serviceEndpoint = "http://127.0.0.1:" + BuildConfig.PORT;
         logger.debug("WireMock Endpoint: " + serviceEndpoint);
 
-        OkHttpClient okHttpClient = InjectionFactory.buildOkhttpClient();
+        OkHttpClient okHttpClient = InjectionFactory.okHttpClient;
 
         String uri = "/hello-world";
         Request request = new Request.Builder()

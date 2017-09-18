@@ -2,15 +2,13 @@ apply plugin: 'com.android.application'
 apply plugin: 'spoon'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    compileSdkVersion 26
+    buildToolsVersion '26.0.0'
 
     defaultConfig {
         applicationId "weatherview.joshskeen.com.weatherview"
-        minSdkVersion 14
-        // For any flavor using WireMock, Platform 19 is required because for Java 7 which is required by WireMock.
-        // This doesn't mean your normal app has to be though
-        targetSdkVersion 23
+        minSdkVersion 21
+        targetSdkVersion 22
         buildConfigField "String", "WEATHERVIEW_API_KEY", "\"840dbdf2737a7ff9\"";
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -19,7 +17,6 @@ android {
     }
 
     dexOptions {
-        incremental true
         javaMaxHeapSize "4g"
     }
 
@@ -43,31 +40,33 @@ android {
 
 dependencies {
     //------ Compile Dependencies ------
-    compile('com.squareup.retrofit2:retrofit:2.1.0') {
+    implementation('com.squareup.retrofit2:retrofit:2.3.0') {
         exclude group: 'com.squareup.okhttp3', module: 'okhttp'
     }
-    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
-    compile 'com.squareup.okhttp3:okhttp:3.5.0'
-    compile "com.squareup.okhttp3:logging-interceptor:3.5.0"
-    compile "org.slf4j:slf4j-api:1.7.12"
+    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
+    implementation 'com.squareup.okhttp3:okhttp:3.8.0'
+    implementation "com.squareup.okhttp3:logging-interceptor:3.8.0"
+    implementation "org.slf4j:slf4j-api:1.7.12"
+
+    implementation 'com.google.dagger:dagger:2.8'
 
     //------ Android Test Dependencies ------
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2') {
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:3.0.1') {
         exclude group: 'com.android.support', module: 'support-annotations'
         exclude group: 'com.google.guava', module: 'guava'
         exclude group: 'junit', module: 'junit'
     }
-    androidTestCompile 'com.android.support.test:runner:0.5'
+    androidTestImplementation 'com.android.support.test:runner:1.0.1'
 
-    androidTestCompile 'junit:junit:4.12'
+    androidTestImplementation 'junit:junit:4.12'
 
     //MockWebServer - Version 2.2 of mockwebserver doesn't work because of an issue, so forcing v2.1 - https://github.com/square/okhttp/issues/1069
-    androidTestCompile('com.squareup.okhttp3:mockwebserver:3.5.0') {
+    androidTestImplementation('com.squareup.okhttp3:mockwebserver:3.8.0') {
         exclude module: 'okhttp'
     }
 
     //WireMock
-    androidTestCompile("com.github.tomakehurst:wiremock:2.5.0") {
+    androidTestImplementation("com.github.tomakehurst:wiremock:2.8.0") {
         //Using Android Version Instead
         exclude group: 'org.apache.httpcomponents', module: 'httpclient'
 
@@ -82,10 +81,12 @@ dependencies {
         //In case of problem, please repackage with jarjar to change the class packages
         exclude group: 'org.json', module: 'json'
     }
-    androidTestCompile 'org.apache.httpcomponents:httpclient-android:4.3.5.1'
-    androidTestCompile 'commons-io:commons-io:2.4'
+    androidTestImplementation 'org.apache.httpcomponents:httpclient-android:4.3.5.1'
+    androidTestImplementation 'commons-io:commons-io:2.5'
 
-    androidTestCompile "com.squareup.spoon:spoon-client:1.5.6"
+    androidTestImplementation "com.squareup.spoon:spoon-client:1.7.1"
+
+    androidTestImplementation 'com.jakewharton.espresso:okhttp3-idling-resource:1.0.0'
 }
 configurations {
     all*.exclude group: 'commons-logging', module: 'commons-logging'
@@ -99,5 +100,6 @@ spoon {
 
     codeCoverage = false
 
-    shard = true
+    // To grant permissions to Android M >= devices (For screenshot storage)
+    grantAllPermissions = true
 }

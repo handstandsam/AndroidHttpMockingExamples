@@ -2,7 +2,6 @@ package com.handstandsam.httpmocking.tests.wiremock;
 
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
-import android.support.test.runner.AndroidJUnit4;
 
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import com.joshskeen.weatherview.BuildConfig;
@@ -12,13 +11,12 @@ import com.joshskeen.weatherview.service.WeatherServiceManager;
 
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.typeText;
+import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -57,7 +55,7 @@ public class WireMockActivityInstrumentationTestCase2 {
         logger.debug("WireMock Endpoint: " + serviceEndpoint);
         activity.setWeatherServiceManager(new WeatherServiceManager(serviceEndpoint));
 
-        onView(ViewMatchers.withId(R.id.editText)).perform(typeText("atlanta"));
+        onView(ViewMatchers.withId(R.id.editText)).perform(replaceText("atlanta"));
         onView(withId(R.id.button)).perform(click());
         onView(withId(R.id.textView)).check(matches(withText(containsString("GA"))));
     }

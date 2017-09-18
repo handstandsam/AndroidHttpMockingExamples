@@ -14,7 +14,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:text="@string/city" />
+        android:hint="@string/city" />
 
     <TextView
         android:id="@+id/textView"

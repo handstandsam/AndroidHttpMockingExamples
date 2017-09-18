@@ -1,16 +1,11 @@
 package com.joshskeen.weatherview.service;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.joshskeen.weatherview.inject.InjectionFactory;
-import com.joshskeen.weatherview.model.WeatherCondition;
+import com.joshskeen.weatherview.model.ConditionsServiceResponse;
 
-import java.io.IOException;
-import java.util.List;
+import retrofit2.Call;
 
 public class WeatherServiceManager {
-
-    private static Gson gson = new GsonBuilder().create();
 
     private final WeatherServiceInterface mWeatherServiceInterface;
 
@@ -19,13 +14,7 @@ public class WeatherServiceManager {
                 .create(WeatherServiceInterface.class);
     }
 
-    public List<WeatherCondition> getConditionsFor(String name) {
-        try {
-            return mWeatherServiceInterface.getConditions(name).execute().body().getConditionsResponse()
-                    .getWeatherConditions();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+    public Call<ConditionsServiceResponse> getConditionsFor(String name) {
+        return mWeatherServiceInterface.getConditions(name);
     }
 }

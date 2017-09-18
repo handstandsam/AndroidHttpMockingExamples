@@ -21,7 +21,7 @@ import okhttp3.mockwebserver.MockWebServer;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.typeText;
+import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -68,7 +68,7 @@ public class MockWebServerEnqueueTest {
         activity = activityRule.getActivity();
         logger.debug("testMockWebServerEnqueue");
 
-        onView(ViewMatchers.withId(R.id.editText)).perform(typeText("atlanta"));
+        onView(ViewMatchers.withId(R.id.editText)).perform(replaceText("atlanta"));
         onView(withId(R.id.button)).perform(click());
         onView(withId(R.id.textView)).check(matches(withText(containsString("GA"))));
     }
