@@ -1,10 +1,10 @@
 ## AndroidHttpMockingExamples ##
 
-**These are examples by @HandstandSam - http://handstandsam.com to allow you to mock out external HTTP services on and Android device itself.**
+**These are examples by @HandstandSam - https://handstandsam.com to allow you to mock out external HTTP services on and Android device itself.**
 
 ## Android "androidTest" Examples for: ##
-* WireMock 2.5.0
-* okhttp MockWebServer 3.5.0
+* WireMock 2.8.0
+* okhttp MockWebServer 3.8.0
 
 ### Links ###
 * WireMock (by @tomakehurst) - http://wiremock.org/
@@ -13,7 +13,6 @@
 
 ### Credits ###
 The Sample Application and Espresso Testing Logic is from the following repositories:
-* https://github.com/IgorGanapolsky/weatherview
 * https://github.com/mutexkid/weatherview
 * https://github.com/mike011/Wiremock_Android_Example
 
