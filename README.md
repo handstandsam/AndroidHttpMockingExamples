@@ -7,8 +7,9 @@
 * okhttp MockWebServer 3.8.0
 
 ### Links ###
-* WireMock (by @tomakehurst) - http://wiremock.org/
-* WireMock on GitHub - https://github.com/tomakehurst/wiremock/
+* WireMock (by @tomakehurst) - https://wiremock.org/
+* WireMock on GitHub - https://github.com/wiremock/
+* WireMock on Android documentation - https://wiremock.org/docs/android/
 * okhttp MockWebServer on GitHub - https://github.com/square/okhttp/tree/master/mockwebserver
 
 ### Credits ###
